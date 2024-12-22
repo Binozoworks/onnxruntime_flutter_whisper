@@ -76,7 +76,7 @@ jobs:
         run: ./build.sh --use_extensions --config Release --skip_tests --use_coreml --use_xcode --ios --apple_sysroot iphoneos --osx_arch arm64 --apple_deploy_target 15 --cmake_generator Xcode
 
       - name: (Debug) list dylibs
-        run: find . -name "*.dylib"
+        run: find . -name "*.dylib"a
 
       - name: Compile onnxruntime-extensions
         working-directory: onnxruntime-extensions
@@ -97,6 +97,13 @@ jobs:
       - name: (Debug) list dylibs
         run: find . -name "*.dylib"
 
+      - uses: actions/upload-artifact@v4
+        name: Upload built libonnxruntime library
+        with:
+          name: "libonnxruntime.1.20.1.dylib"
+          path: "onnxruntime/build/MacOS/Release/libonnxruntime.1.20.1.dylib"
+          if-no-files-found: error
+          retention-days: 1
 
   build-windows-runtime:
     runs-on: windows-2025
