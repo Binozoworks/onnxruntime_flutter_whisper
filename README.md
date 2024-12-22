@@ -3,6 +3,9 @@
 # OnnxRuntime Plugin
 [![pub package](https://img.shields.io/pub/v/onnxruntime.svg)](https://pub.dev/packages/onnxruntime)
 
+> [!WARNING]
+> This package is specialized for whisper onnx models. Other onnx models may not run. This is a fork of [onnxruntime_flutter](https://github.com/gtbluesky/onnxruntime_flutter).
+
 ## Overview
 
 Flutter plugin for OnnxRuntime via `dart:ffi` provides an easy, flexible, and fast Dart API to integrate Onnx models in flutter apps across mobile and desktop platforms.
