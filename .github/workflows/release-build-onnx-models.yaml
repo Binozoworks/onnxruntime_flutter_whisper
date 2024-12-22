@@ -8,6 +8,7 @@ jobs:
   build-whisper:
     strategy:
       fail-fast: false
+      max-parallel: 4
       matrix:
         whisper-model: [ whisper-tiny, whisper-tiny.en, whisper-base, whisper-base.en, whisper-small, whisper-small.en, whisper-medium, whisper-medium.en, whisper-large, whisper-large-v2, whisper-large-v3, whisper-large-v3-turbo ]
     runs-on: ubuntu-24.04
@@ -26,7 +27,7 @@ jobs:
       - run: pip install onnxruntime onnxruntime-extensions
       - run: pip install .
 
-      - name: Building whisper-tiny
+      - name: Building ${{ matrix.whisper-model }}
         working-directory: examples/whisper
         run: |
           python3 prepare_whisper_configs.py --model_name openai/${{ matrix.whisper-model }}
