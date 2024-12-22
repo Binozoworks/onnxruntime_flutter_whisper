@@ -1,0 +1,37 @@
+name: Build ONNX runtimes
+run-name: ONNX Models build
+
+on:
+  push:
+    paths:
+      - onnxruntime
+      - onnxruntime-extensions
+  workflow_dispatch:
+
+jobs:
+  build-android-runtime:
+    runs-on: ubuntu-24.04
+    name: Build Android ONNX runtime
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK
+        run: |
+          sdkmanager --update
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          sdkmanager --install "ndk;27.0.11718014"
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
+      - name: Compile
+        working-directory: onnxruntime
+        run: ./build.sh --android --android_sdk_path "$ANDROID_HOME" --android_ndk_path "$ANDROID_HOME/ndk/$NDK_VERSION" --android_api 34 --use_extensions --use_nnapi --config Release --build_shared_lib --skip_tests
