@@ -26,7 +26,7 @@ jobs:
         run: |
           sdkmanager --update
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
-          sdkmanager --install "ndk;27.0.11718014"
+          sdkmanager --install "ndk;27.0.11718014" "cmake;3.31.1"
 
       - uses: actions/checkout@v4
         with:
