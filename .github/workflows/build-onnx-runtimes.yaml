@@ -23,6 +23,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
@@ -31,7 +36,6 @@ jobs:
           sdkmanager --update
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
           sdkmanager --install "ndk;27.0.11718014" "cmake;3.31.1"
-          sudo apt-get install -y ninja
 
       - uses: actions/checkout@v4
         with:
