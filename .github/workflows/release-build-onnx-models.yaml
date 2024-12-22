@@ -6,6 +6,7 @@ on:
 
 jobs:
   build-whisper:
+    timeout-minutes: 360
     strategy:
       fail-fast: false
       max-parallel: 4
@@ -30,7 +31,7 @@ jobs:
       - name: Building ${{ matrix.whisper-model }}
         working-directory: examples/whisper
         run: |
-          python3 prepare_whisper_configs.py --model_name openai/${{ matrix.whisper-model }}
+          python3 prepare_whisper_configs.py --model_name openai/${{ matrix.whisper-model }} --multilingual
           olive run --config whisper_cpu_int8.json --setup
           olive run --config whisper_cpu_int8.json
 
