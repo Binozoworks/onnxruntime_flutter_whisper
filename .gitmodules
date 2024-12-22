@@ -1,0 +1,6 @@
+[submodule "onnxruntime"]
+	path = onnxruntime
+	url = https://github.com/microsoft/onnxruntime
+[submodule "onnxruntime-extensions"]
+	path = onnxruntime-extensions
+	url = https://github.com/microsoft/onnxruntime-extensions
