@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 3600
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 10
       matrix:
         whisper-model: [ whisper-tiny, whisper-tiny.en, whisper-base, whisper-base.en, whisper-small, whisper-small.en, whisper-medium, whisper-medium.en, whisper-large, whisper-large-v2, whisper-large-v3, whisper-large-v3-turbo ]
     runs-on: ubuntu-24.04
