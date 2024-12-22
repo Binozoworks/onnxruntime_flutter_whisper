@@ -31,7 +31,7 @@ jobs:
       - name: Building ${{ matrix.whisper-model }}
         working-directory: examples/whisper
         run: |
-          python3 prepare_whisper_configs.py --model_name openai/${{ matrix.whisper-model }} --multilingual
+          python3 prepare_whisper_configs.py --model_name openai/${{ matrix.whisper-model }}
           olive run --config whisper_cpu_int8.json --setup
           olive run --config whisper_cpu_int8.json
 
