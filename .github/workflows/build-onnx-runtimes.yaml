@@ -34,4 +34,4 @@ jobs:
 
       - name: Compile
         working-directory: onnxruntime
-        run: ./build.sh --android --android_sdk_path "$ANDROID_HOME" --android_ndk_path "$ANDROID_HOME/ndk/$NDK_VERSION" --android_api 35 --use_extensions --use_nnapi --config Release --build_shared_lib --skip_tests
+        run: ./build.sh --use_extensions --use_nnapi --use_xnnpack --config Release --build_shared_lib --skip_tests --cmake_generator Ninja --build_dir build/Android --android --android_sdk_path "$ANDROID_HOME" --android_ndk_path "$ANDROID_HOME/ndk/$NDK_VERSION" --android_api 35 --android_abi arm64-v8a
