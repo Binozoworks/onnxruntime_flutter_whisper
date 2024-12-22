@@ -27,9 +27,9 @@ jobs:
       - name: Building whisper-tiny
         working-directory: examples/whisper
         run: |
-          python3 prepare_whisper_configs.py --model_name openai/${{ matrix.whisper-model }} --multilingual --enable_timestamps
-          python3 -m olive.workflows.run --config whisper_cpu_int8.json --setup
-          python3 -m olive.workflows.run --config whisper_cpu_int8.json
+          python3 prepare_whisper_configs.py --model_name openai/${{ matrix.whisper-model }} --multilingual
+          olive run --config whisper_cpu_int8.json --setup
+          olive run --config whisper_cpu_int8.json
 
       - uses: actions/upload-artifact@v4
         name: Upload generated onnx file
