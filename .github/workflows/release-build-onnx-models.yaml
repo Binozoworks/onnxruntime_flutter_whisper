@@ -7,6 +7,7 @@ on:
 jobs:
   build-whisper:
     strategy:
+      fail-fast: false
       matrix:
         whisper-model: [ whisper-tiny, whisper-tiny.en, whisper-base, whisper-base.en, whisper-small, whisper-small.em, whisper-medium, whisper-medium.en, whisper-large, whisper-large-v2, whisper-large-v3, whisper-large-v3-turbo ]
     runs-on: ubuntu-latest
