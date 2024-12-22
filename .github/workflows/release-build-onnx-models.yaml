@@ -9,8 +9,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        whisper-model: [ whisper-tiny, whisper-tiny.en, whisper-base, whisper-base.en, whisper-small, whisper-small.em, whisper-medium, whisper-medium.en, whisper-large, whisper-large-v2, whisper-large-v3, whisper-large-v3-turbo ]
-    runs-on: ubuntu-latest
+        whisper-model: [ whisper-tiny, whisper-tiny.en, whisper-base, whisper-base.en, whisper-small, whisper-small.en, whisper-medium, whisper-medium.en, whisper-large, whisper-large-v2, whisper-large-v3, whisper-large-v3-turbo ]
+    runs-on: ubuntu-24.04
     name: Building ${{ matrix.whisper-model }} onnx model
     steps:
       - name: Clone Olive
@@ -34,7 +34,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Upload generated onnx file
         with:
-          name: "${{ matrix.whisper-model }}"
+          name: "${{ matrix.whisper-model }}.onnx"
           path: 'examples/whisper/models/whisper_cpu_int8/model.onnx'
           if-no-files-found: error
           retention-days: 1
