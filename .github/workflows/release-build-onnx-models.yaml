@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-24.04
     name: Building ${{ matrix.whisper-model }} onnx model
     steps:
+      - name: Cleanup GitHub bloat
+        run: curl -s -L https://raw.githubusercontent.com/apache/flink/02d30ace69dc18555a5085eccf70ee884e73a16e/tools/azure-pipelines/free_disk_space.sh | bash
       - name: Clone Olive
         run: git clone https://github.com/microsoft/Olive.git .
 
