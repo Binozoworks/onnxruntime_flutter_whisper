@@ -81,3 +81,31 @@ jobs:
       - name: Compile onnxruntime-extensions
         working-directory: onnxruntime-extensions
         run: ./build.ios_xcframework
+
+  build-macos-runtime:
+    runs-on: macos-14
+    name: Build MacOS ONNX runtime
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
+      - name: Compile onnxruntime
+        working-directory: onnxruntime
+        run: ./build.sh --config Release --build_shared_lib --parallel --compile_no_warning_as_error --cmake_extra_defines CMAKE_OSX_ARCHITECTURES=arm64
+
+      - name: (Debug) list dylibs
+        run: find . -name "*.dylib"
+
+
+  build-windows-runtime:
+    runs-on: windows-2025
+    name: Build Windows ONNX runtime
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
+      - name: Compile onnxruntime
+        working-directory: onnxruntime
+        run: .\build.bat --config=Release --cmake_generator="Visual Studio 16 2019" --build_shared_lib --skip_tests
