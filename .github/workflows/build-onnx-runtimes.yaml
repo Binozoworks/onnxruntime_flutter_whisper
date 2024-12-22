@@ -66,7 +66,7 @@ jobs:
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
           echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/runner/.zprofile
           eval "$(/opt/homebrew/bin/brew shellenv)"
-          brew install libpng
+          brew install libpng cmake
       - uses: actions/checkout@v4
         with:
           submodules: 'true'
@@ -108,4 +108,4 @@ jobs:
 
       - name: Compile onnxruntime
         working-directory: onnxruntime
-        run: .\build.bat --config=Release --cmake_generator="Visual Studio 16 2019" --build_shared_lib --skip_tests
+        run: .\build.bat --config=Release --cmake_generator="Visual Studio 17 2022" --build_shared_lib --skip_tests
