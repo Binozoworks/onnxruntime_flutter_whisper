@@ -54,3 +54,19 @@ jobs:
           abi_name: ${{ matrix.arch }}
           ANDROID_API_LEVEL: "35"
         run: ./build.android
+
+  build-ios-runtime:
+    runs-on: macos-14
+    name: Build iOS ONNX runtime
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
+      - name: Compile onnxruntime
+        working-directory: onnxruntime
+        run: ./build.sh --use_extensions --config Release --skip_tests --use_coreml --use_xcode --ios --apple_sysroot iphoneos --osx_arch arm64 --apple_deploy_target 15
+
+      - name: Compile onnxruntime-extensions
+        working-directory: onnxruntime-extensions
+        run: ./build.ios_xcframework
