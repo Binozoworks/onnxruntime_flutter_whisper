@@ -37,6 +37,9 @@ jobs:
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
           sdkmanager --install "ndk;27.0.11718014" "cmake;3.31.1"
 
+      - name: Searching for Android SDK
+        run: find . -name "27.0.11718014"
+
       - uses: actions/checkout@v4
         with:
           submodules: 'true'
@@ -57,6 +60,24 @@ jobs:
 
       - name: (Debug) list so
         run: find . -name "*.so"
+
+      - uses: actions/upload-artifact@v4
+        name: Upload built libonnxruntime library
+        with:
+          name: "libonnxruntime.1.20.1.so"
+          path: "onnxruntime/build/Android/Release/libonnxruntime.so"
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Copy runtime to repository
+        run: |
+          cp -f onnxruntime/build/Android/Release/libonnxruntime.so android/src/main/jniLibs/${{ matrix.arch }}/libonnxruntime.1.20.1.so
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Built Android runtime
+          file_pattern: '*.so'
+          commit_user_name: Building Chad
 
   build-ios-runtime:
     runs-on: macos-15
@@ -82,9 +103,27 @@ jobs:
       - name: (Debug) list dylibs
         run: find . -name "*.dylib"
 
+      - uses: actions/upload-artifact@v4
+        name: Upload built libonnxruntime library
+        with:
+          name: "libonnxruntime.1.20.1.dylib"
+          path: "onnxruntime/build/iOS/Release/Release-iphoneos/libonnxruntime.1.20.1.dylib"
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Copy runtime to repository
+        run: |
+          cp -f onnxruntime/build/iOS/Release/Release-iphoneos/libonnxruntime.1.20.1.dylib ios/libonnxruntime.1.20.1.dylib
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Built iOS runtime
+          file_pattern: '*.dylib'
+          commit_user_name: Building Chad
+
       - name: Compile onnxruntime-extensions
         working-directory: onnxruntime-extensions
-        run: ./build.ios_xcframework --output_dir build/iOS --config Release --apple_deploy_target 13 --platform_arch iphoneos arm64
+        run: ./build.ios_xcframework --output_dir build/iOS --config Release --ios_deployment_target 13 --platform_arch iphoneos arm64
 
       - name: (Debug) list dylibs
         run: find . -name "*.dylib"
@@ -104,7 +143,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Upload built libonnxruntime library
         with:
-          name: "libonnxruntime.1.20.1.dylib"
+          name: "libonnxruntime.mac.1.20.1.dylib"
           path: "onnxruntime/build/MacOS/Release/libonnxruntime.1.20.1.dylib"
           if-no-files-found: error
           retention-days: 1
@@ -131,5 +170,20 @@ jobs:
         working-directory: onnxruntime
         run: .\build.bat --config=Release --cmake_generator="Visual Studio 17 2022" --build_shared_lib --skip_tests
 
-      - name: (Debug) list DLLs
-        run: Get-ChildItem -Recurse -Filter *.dll | Select-Object -ExpandProperty FullName
+      - uses: actions/upload-artifact@v4
+        name: Upload built libonnxruntime library
+        with:
+          name: "onnxruntime.1.20.1.dll"
+          path: "onnxruntime\build\Windows\Release\Release\onnxruntime.dll"
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Copy runtime to repository
+        run: |
+          Copy-Item -Force onnxruntime\build\Windows\Release\Release\onnxruntime.dll windows\onnxruntime.dll
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Built Windows runtime
+          file_pattern: '*.dll'
+          commit_user_name: Building Chad
