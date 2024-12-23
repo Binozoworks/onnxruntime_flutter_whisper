@@ -125,7 +125,7 @@ jobs:
 
       - name: Compile onnxruntime-extensions
         working-directory: onnxruntime-extensions
-        run: ./build.ios_xcframework --output_dir build/iOS-extensions --config Release --ios_deployment_target 13 --platform_arch iphoneos arm64 --mode build_platform_arch_frameworks_only -- --one_cmake_extra_define
+        run: ./build.ios_xcframework --output_dir build/iOS-extensions --config Release --ios_deployment_target 13 --platform_arch iphoneos arm64 --mode build_platform_arch_frameworks_only
 
       - name: (Debug) list dylibs
         run: find . -name "*.dylib"
