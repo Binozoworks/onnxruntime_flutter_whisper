@@ -37,9 +37,6 @@ jobs:
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
           sdkmanager --install "ndk;27.0.11718014" "cmake;3.31.1"
 
-      - name: Searching for Android SDK
-        run: find . -name "27.0.11718014"
-
       - uses: actions/checkout@v4
         with:
           submodules: 'true'
@@ -51,8 +48,8 @@ jobs:
       - name: Compile onnxruntime-extensions
         working-directory: onnxruntime-extensions
         env:
-          NDK_ROOT: "$ANDROID_HOME/ndk/27.0.11718014"
-          ANDROID_SDK_ROOT: "$ANDROID_HOME"
+          NDK_ROOT: "/usr/local/lib/android/sdk/ndk/27.0.11718014"
+          ANDROID_SDK_ROOT: "/usr/local/lib/android/sdk"
           ANDROID_NDK_VERSION: "27.0.11718014"
           abi_name: ${{ matrix.arch }}
           ANDROID_API_LEVEL: "35"
@@ -78,6 +75,8 @@ jobs:
           commit_message: Built Android runtime
           file_pattern: '*.so'
           commit_user_name: Building Chad
+          skip_checkout: false
+          skip_fetch: false
 
   build-ios-runtime:
     runs-on: macos-15
@@ -120,10 +119,12 @@ jobs:
           commit_message: Built iOS runtime
           file_pattern: '*.dylib'
           commit_user_name: Building Chad
+          skip_checkout: false
+          skip_fetch: false
 
       - name: Compile onnxruntime-extensions
         working-directory: onnxruntime-extensions
-        run: ./build.ios_xcframework --output_dir build/iOS --config Release --ios_deployment_target 13 --platform_arch iphoneos arm64
+        run: ./build.ios_xcframework --output_dir build/iOS-extensions --config Release --ios_deployment_target 13 --platform_arch iphoneos arm64 --config Release -- --one_cmake_extra_define OCOS_ENABLE_SELECTED_OPLIST=ON
 
       - name: (Debug) list dylibs
         run: find . -name "*.dylib"
@@ -157,6 +158,8 @@ jobs:
           commit_message: Built MacOS runtime
           file_pattern: '*.dylib'
           commit_user_name: Building Chad
+          skip_checkout: false
+          skip_fetch: false
 
   build-windows-runtime:
     runs-on: windows-2025
@@ -187,3 +190,5 @@ jobs:
           commit_message: Built Windows runtime
           file_pattern: '*.dll'
           commit_user_name: Building Chad
+          skip_checkout: false
+          skip_fetch: false
