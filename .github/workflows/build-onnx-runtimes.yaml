@@ -113,6 +113,12 @@ jobs:
         run: |
           cp -f onnxruntime/build/MacOS/Release/libonnxruntime.1.20.1.dylib macos/libonnxruntime.1.20.1.dylib
 
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Built MacOS runtime
+          file_pattern: '*.dylib'
+          commit_user_name: Building Chad
+
   build-windows-runtime:
     runs-on: windows-2025
     name: Build Windows ONNX runtime
