@@ -55,6 +55,9 @@ jobs:
           ANDROID_API_LEVEL: "35"
         run: ./build.android
 
+      - name: (Debug) list so
+        run: find . -name "*.so"
+
   build-ios-runtime:
     runs-on: macos-15
     name: Build iOS ONNX runtime
@@ -74,14 +77,17 @@ jobs:
       - name: Compile onnxruntime
         working-directory: onnxruntime
         #run: ./build.sh --use_extensions --config Release --skip_tests --use_coreml --use_xcode --ios --apple_sysroot iphoneos --osx_arch arm64 --apple_deploy_target 15 --cmake_generator Xcode
-        run: ./build.sh --build_shared_lib --use_coreml --use_xnnpack --ios --apple_sysroot iphoneos --osx_arch arm64 --apple_deploy_target=13.0 --use_xcode --config Release --build_apple_framework --parallel --use_binskim_compliant_compile_flags # Taken from https://dev.azure.com/onnxruntime/onnxruntime/_build/results?buildId=1576420&view=logs&j=f7cc61a9-cc70-56e7-b06c-4668ca17e426&t=16d281b5-1bfd-5309-f274-36d0dffd9cb1
+        run: ./build.sh --build_shared_lib --use_coreml --skip_tests --use_xnnpack --ios --apple_sysroot iphoneos --osx_arch arm64 --apple_deploy_target 14 --use_xcode --config Release --parallel --use_binskim_compliant_compile_flags
 
       - name: (Debug) list dylibs
         run: find . -name "*.dylib"
 
       - name: Compile onnxruntime-extensions
         working-directory: onnxruntime-extensions
-        run: ./build.ios_xcframework --output_dir build/iOS --config Release --apple_deploy_target 13 --platform_arch arm64
+        run: ./build.ios_xcframework --output_dir build/iOS --config Release --apple_deploy_target 13 --platform_arch iphoneos arm64
+
+      - name: (Debug) list dylibs
+        run: find . -name "*.dylib"
 
   build-macos-runtime:
     runs-on: macos-14
@@ -93,10 +99,7 @@ jobs:
 
       - name: Compile onnxruntime
         working-directory: onnxruntime
-        run: ./build.sh --config Release --build_shared_lib --parallel --compile_no_warning_as_error --cmake_extra_defines CMAKE_OSX_ARCHITECTURES=arm64
-
-      - name: (Debug) list dylibs
-        run: find . -name "*.dylib"
+        run: ./build.sh --config Release --build_shared_lib --parallel --compile_no_warning_as_error --cmake_extra_defines CMAKE_OSX_ARCHITECTURES=arm64 --skip_tests
 
       - uses: actions/upload-artifact@v4
         name: Upload built libonnxruntime library
@@ -105,6 +108,10 @@ jobs:
           path: "onnxruntime/build/MacOS/Release/libonnxruntime.1.20.1.dylib"
           if-no-files-found: error
           retention-days: 1
+
+      - name: Copy runtime to repository
+        run: |
+          cp -f onnxruntime/build/MacOS/Release/libonnxruntime.1.20.1.dylib macos/libonnxruntime.1.20.1.dylib
 
   build-windows-runtime:
     runs-on: windows-2025
@@ -119,4 +126,4 @@ jobs:
         run: .\build.bat --config=Release --cmake_generator="Visual Studio 17 2022" --build_shared_lib --skip_tests
 
       - name: (Debug) list DLLs
-        run: dir /S /B *.dll
+        run: Get-ChildItem -Recurse -Filter *.dll | Select-Object -ExpandProperty FullName
