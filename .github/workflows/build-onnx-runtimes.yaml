@@ -123,9 +123,17 @@ jobs:
           skip_checkout: false
           skip_fetch: false
 
+  build-ios-runtime-extensions:
+    runs-on: macos-15
+    name: Build iOS ONNX runtime
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
       - name: Compile onnxruntime-extensions
         working-directory: onnxruntime-extensions
-        run: ./build.ios_xcframework --output_dir build/iOS-extensions --config Release --ios_deployment_target 13 --platform_arch iphoneos arm64 --mode build_platform_arch_frameworks_only
+        run: ./build.ios_xcframework --output_dir build/iOS-extensions --config Release --ios_deployment_target 14 --platform_arch iphoneos arm64 --mode pack_xcframework_only
 
       - name: (Debug) list dylibs
         run: find . -name "*.dylib"
