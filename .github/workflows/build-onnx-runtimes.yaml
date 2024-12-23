@@ -77,11 +77,11 @@ jobs:
         run: ./build.sh --build_shared_lib --use_coreml --use_xnnpack --ios --apple_sysroot iphoneos --osx_arch arm64 --apple_deploy_target=13.0 --use_xcode --config Release --build_apple_framework --parallel --use_binskim_compliant_compile_flags # Taken from https://dev.azure.com/onnxruntime/onnxruntime/_build/results?buildId=1576420&view=logs&j=f7cc61a9-cc70-56e7-b06c-4668ca17e426&t=16d281b5-1bfd-5309-f274-36d0dffd9cb1
 
       - name: (Debug) list dylibs
-        run: find . -name "*.dylib"a
+        run: find . -name "*.dylib"
 
       - name: Compile onnxruntime-extensions
         working-directory: onnxruntime-extensions
-        run: ./build.ios_xcframework
+        run: ./build.ios_xcframework --output_dir build/iOS --config Release --apple_deploy_target 13 --platform_arch arm64
 
   build-macos-runtime:
     runs-on: macos-14
@@ -117,3 +117,6 @@ jobs:
       - name: Compile onnxruntime
         working-directory: onnxruntime
         run: .\build.bat --config=Release --cmake_generator="Visual Studio 17 2022" --build_shared_lib --skip_tests
+
+      - name: (Debug) list DLLs
+        run: dir /S /B *.dll
