@@ -61,7 +61,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Upload built libonnxruntime library
         with:
-          name: "libonnxruntime.1.20.1.so"
+          name: "libonnxruntime.${{ matrix.arch }}.1.20.1.so"
           path: "onnxruntime/build/Android/Release/libonnxruntime.so"
           if-no-files-found: error
           retention-days: 1
@@ -124,7 +124,7 @@ jobs:
 
       - name: Compile onnxruntime-extensions
         working-directory: onnxruntime-extensions
-        run: ./build.ios_xcframework --output_dir build/iOS-extensions --config Release --ios_deployment_target 13 --platform_arch iphoneos arm64 --config Release -- --one_cmake_extra_define OCOS_ENABLE_SELECTED_OPLIST=ON
+        run: ./build.ios_xcframework --output_dir build/iOS-extensions --config Release --ios_deployment_target 13 --platform_arch iphoneos arm64 --build --update -- --one_cmake_extra_define OCOS_ENABLE_SELECTED_OPLIST=ON
 
       - name: (Debug) list dylibs
         run: find . -name "*.dylib"
@@ -184,6 +184,7 @@ jobs:
       - name: Copy runtime to repository
         run: |
           Copy-Item -Force onnxruntime\build\Windows\Release\Release\onnxruntime.dll windows\onnxruntime.dll
+          git pull
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
