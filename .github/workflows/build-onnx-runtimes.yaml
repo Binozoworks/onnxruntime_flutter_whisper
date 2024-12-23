@@ -68,6 +68,7 @@ jobs:
 
       - name: Copy runtime to repository
         run: |
+          git pull
           cp -f onnxruntime/build/Android/Release/libonnxruntime.so android/src/main/jniLibs/${{ matrix.arch }}/libonnxruntime.1.20.1.so
 
       - uses: stefanzweifel/git-auto-commit-action@v5
