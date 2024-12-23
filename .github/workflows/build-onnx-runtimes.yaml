@@ -98,7 +98,7 @@ jobs:
       - name: Compile onnxruntime
         working-directory: onnxruntime
         #run: ./build.sh --use_extensions --config Release --skip_tests --use_coreml --use_xcode --ios --apple_sysroot iphoneos --osx_arch arm64 --apple_deploy_target 15 --cmake_generator Xcode
-        run: ./build.sh --build_shared_lib --use_coreml --skip_tests --use_xnnpack --ios --apple_sysroot iphoneos --osx_arch arm64 --apple_deploy_target 14 --use_xcode --config Release --parallel --use_binskim_compliant_compile_flags
+        run: ./build.sh --use_extensions --build_shared_lib --use_coreml --skip_tests --use_xnnpack --ios --apple_sysroot iphoneos --osx_arch arm64 --apple_deploy_target 14 --use_xcode --config Release --parallel --use_binskim_compliant_compile_flags
 
       - name: (Debug) list dylibs
         run: find . -name "*.dylib"
